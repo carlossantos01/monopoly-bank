@@ -4,14 +4,11 @@
   "private": true,
   "scripts": {
     "docker": "docker run -d --rm --publish 5432:5432 -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=databasename postgres",
-    "coldstart": "yarn docker && yarn install && npx prisma migrate dev --name init && prisma generate && npx prisma db seed && yarn dev",
+    "coldstart": "yarn docker && yarn install && npx prisma migrate dev --name init && prisma generate && yarn dev",
     "dev": "next dev --turbopack",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
-  },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.1.0",
