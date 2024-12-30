@@ -26,7 +26,8 @@ model Player {
   balance     Float         @default(1500)
   roomId      String
   room        Room         @relation(fields: [roomId], references: [id])
-  Transaction Transaction[]
+  sentTransactions     Transaction[] @relation("Sender")
+  receivedTransactions Transaction[] @relation("Receiver")
 }
 
 model Transaction {
@@ -34,8 +35,10 @@ model Transaction {
   amount      Float
   description String
   createdAt   DateTime @default(now())
-  playerId    String
-  player      Player   @relation(fields: [playerId], references: [id])
+  senderId    String
+  receiverId  String
   roomId      String
+  sender      Player  @relation("Sender", fields: [senderId], references: [id])
+  receiver    Player  @relation("Receiver", fields: [receiverId], references: [id])
   room        Room     @relation(fields: [roomId], references: [id])
 }
