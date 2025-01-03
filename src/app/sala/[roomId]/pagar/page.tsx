@@ -11,7 +11,7 @@ import {
 import { getPlayer, getPlayers, getRoom, pay } from "@/lib/api";
 import { convertToBRL, convertValueToAPI, inputMask } from "@/lib/utils";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { toast } from "sonner";
 import { Player, Room } from "../page";
@@ -31,12 +31,12 @@ export default function Home({ params }: Props) {
   const [receiver, setReceiver] = useState("");
   const [transactionValue, setTransactionValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-const router = useRouter();
+  const router = useRouter();
 
 
-  const verifyRoom = async () => {
+  const verifyRoom = useCallback(async () => {
     try {
-      const { roomId } = await params;
+      const { roomId } = params;
       const res = await getRoom(roomId);
       const data = await res;
       setRoom(data);
@@ -45,7 +45,7 @@ const router = useRouter();
       toast.error("Erro ao buscar a sala");
       console.error("Erro ao buscar a sala:", error);
     }
-  };
+  }, [params]);
 
   const verifyPlayer = async () => {
     try {
@@ -62,9 +62,9 @@ const router = useRouter();
     }
   };
 
-  const getAllPlayers = async () => {
+  const getAllPlayers = useCallback(async () => {
     try {
-      const { roomId } = await params;
+      const { roomId } = params;
       const res = await getPlayers(roomId);
       const data = await res;
       setPlayers(data);
@@ -73,15 +73,13 @@ const router = useRouter();
       toast.error("Erro ao buscar jogador(es)");
       console.error("Erro ao buscar jogador(es):", error);
     }
-  };
+  }, [params]);
 
   useEffect(() => {
-    if (!room && !player) {
-      verifyRoom();
-      verifyPlayer();
-      getAllPlayers();
-    }
-  }, []);
+    verifyRoom();
+    verifyPlayer();
+    getAllPlayers();
+  }, [player, room, verifyRoom, getAllPlayers]);
   
   const handleInputMask = (value: string) => {
     setTransactionValue(inputMask(value));
