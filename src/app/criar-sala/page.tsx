@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { IoMdLink } from "react-icons/io";
 import {QRCodeSVG} from 'qrcode.react';
+import { toast } from "sonner";
 
 export default function Home() {
   const [roomId, setRoomId] = useState("");
@@ -27,14 +28,16 @@ export default function Home() {
       }
 
       const data = await response.json();
-      console.log("Sala criada:", data);
 
+      toast.success("Sala criada");
+      
       setIsLoading(false);
-      setRoomId(id);
+      setRoomId(data.id);
     } catch (error) {
+      toast.error("Erro ao criar a sala");
+      setIsLoading(false);
       console.error(error);
     }
-    setRoomId(id);
   }
 
   return (

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Mulish } from 'next/font/google';
+import { Toaster } from "@/components/ui/sonner"
 
 const mulish = Mulish({ subsets: ['latin'] })
 
@@ -20,6 +21,7 @@ export default function RootLayout({
         className={`${mulish.className} antialiased bg-zinc-800`}
       >
         {children}
+        <Toaster position="bottom-center" richColors/>      
       </body>
     </html>
   );
